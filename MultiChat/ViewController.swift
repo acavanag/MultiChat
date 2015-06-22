@@ -22,7 +22,7 @@ class ViewController: UIViewController, MessageResponderDelegate, UITableViewDat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        session = SessionManager(delegate: self)
+        session = SessionManager(displayName: "Andrew", delegate: self)
         tableView.dataSource = self
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableViewAutomaticDimension

@@ -20,30 +20,58 @@ protocol MessageResponderDelegate: class, NSObjectProtocol {
 
 private let cm_serviceType = "cm-chat-service"
 
-class SessionManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCSessionDelegate {
+class SessionManager: NSObject {
     
-    private var session: MCSession
+    lazy var session : MCSession = {
+        let session = MCSession(peer: self.localPeer, securityIdentity: nil, encryptionPreference: .None)
+        session?.delegate = self
+        return session
+    }()
+    
     private var localPeer: MCPeerID
     private var advertiser: MCNearbyServiceAdvertiser
+    private var browser: MCNearbyServiceBrowser
+    
     private weak var delegate: MessageResponderDelegate?
+    
     private(set) var isAdvertising: Bool = false
+    private(set) var isBrowsing: Bool = false
     
     init(displayName: String = UIDevice.currentDevice().name, delegate: MessageResponderDelegate) {
         localPeer = MCPeerID(displayName: displayName)
-        session = MCSession(peer: localPeer)
+
+        browser = MCNearbyServiceBrowser(peer: localPeer, serviceType: cm_serviceType)
         advertiser = MCNearbyServiceAdvertiser(peer: localPeer, discoveryInfo: nil, serviceType: cm_serviceType)
+        
         self.delegate = delegate
+        
         super.init()
+        
         advertiser.delegate = self
+        browser.delegate = self
+        
+        browse(true)
+        advertise(true)
     }
     
-    func advertise(advertise: Bool) {
+    // MARK: - Browsing / Advertising
+    
+    private func advertise(advertise: Bool) {
         if advertise {
             advertiser.startAdvertisingPeer()
         } else {
             advertiser.stopAdvertisingPeer()
         }
         isAdvertising = !isAdvertising
+    }
+    
+    private func browse(browse: Bool) {
+        if browse {
+            browser.startBrowsingForPeers()
+        } else {
+            browser.stopBrowsingForPeers()
+        }
+        isBrowsing = !isBrowsing
     }
     
     // MARK: - Abstracted Data Handling
@@ -67,24 +95,43 @@ class SessionManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCSessionDele
             delegate?.didReceiveMessage(Message(peer: peer, message: data))
         }
     }
+
+}
+
+// MARK: - Browser Delegate
+
+extension SessionManager: MCNearbyServiceBrowserDelegate {
     
-    // Objective-C protocols support optional methods (hence a doesRespondToSelector() call is made).
-    // This requires the delegate methods to remain exposed and can't (at present) be marked private.
+    func browser(browser: MCNearbyServiceBrowser!, foundPeer peerID: MCPeerID!, withDiscoveryInfo info: [NSObject : AnyObject]!) {
+        browser.invitePeer(peerID, toSession: session, withContext: nil, timeout: 10)
+    }
     
-    // MARK: - Advertiser Delegate
+    func browser(browser: MCNearbyServiceBrowser!, lostPeer peerID: MCPeerID!) {
+        //noop
+    }
+    
+}
+
+// MARK: - Advertiser Delegate
+
+extension SessionManager: MCNearbyServiceAdvertiserDelegate {
     
     func advertiser(advertiser: MCNearbyServiceAdvertiser!, didReceiveInvitationFromPeer peerID: MCPeerID!, withContext context: NSData!, invitationHandler: ((Bool, MCSession!) -> Void)!) {
-        
+        invitationHandler(true, session)
     }
     
-    func advertiser(advertiser: MCNearbyServiceAdvertiser!, didNotStartAdvertisingPeer error: NSError!) {
-        
-    }
-    
-    // MARK: - Session Delegate
+}
+
+// MARK: - Session Delegate
+
+extension SessionManager: MCSessionDelegate {
     
     func session(session: MCSession!, didReceiveData data: NSData!, fromPeer peerID: MCPeerID!) {
         readData(data, peer: peerID)
+    }
+    
+    func session(session: MCSession!, peer peerID: MCPeerID!, didChangeState state: MCSessionState) {
+        //noop
     }
     
     func session(session: MCSession!, didFinishReceivingResourceWithName resourceName: String!, fromPeer peerID: MCPeerID!, atURL localURL: NSURL!, withError error: NSError!) {
@@ -99,9 +146,6 @@ class SessionManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCSessionDele
         //noop
     }
     
-    func session(session: MCSession!, peer peerID: MCPeerID!, didChangeState state: MCSessionState) {
-        //noop
-    }
-    
 }
+
 
