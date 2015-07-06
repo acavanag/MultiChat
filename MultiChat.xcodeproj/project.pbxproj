@@ -162,6 +162,7 @@
 		8677761C1B36FF6F003D9E05 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = WeddingWire;
 				TargetAttributes = {

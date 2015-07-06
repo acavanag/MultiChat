@@ -62,7 +62,7 @@ class SessionManager: NSObject {
         } else {
             advertiser.stopAdvertisingPeer()
         }
-        isAdvertising = !isAdvertising
+        isAdvertising = advertise
     }
     
     private func browse(browse: Bool) {
@@ -71,7 +71,7 @@ class SessionManager: NSObject {
         } else {
             browser.stopBrowsingForPeers()
         }
-        isBrowsing = !isBrowsing
+        isBrowsing = browse
     }
     
     // MARK: - Abstracted Data Handling
@@ -92,7 +92,9 @@ class SessionManager: NSObject {
     
     private func readData(data: NSData, peer: MCPeerID) {
         if let data = NSString(data: data, encoding: NSUTF8StringEncoding) as? String {
-            delegate?.didReceiveMessage(Message(peer: peer, message: data))
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                delegate?.didReceiveMessage(Message(peer: peer, message: data))
+            })
         }
     }
 
