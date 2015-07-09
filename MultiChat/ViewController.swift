@@ -10,7 +10,7 @@ import UIKit
 
 private let mc_chatCell = "mcChatCellIdentifier"
 
-class ViewController: UIViewController, MessageResponderDelegate, UITableViewDataSource {
+final class ViewController: UIViewController, MessageResponderDelegate, UITableViewDataSource, AudioEngineDelegateProtocol {
 
     @IBOutlet weak var inputTextField: UITextField!
     @IBOutlet weak var messageView: UIView!
@@ -22,6 +22,10 @@ class ViewController: UIViewController, MessageResponderDelegate, UITableViewDat
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        AudioEngine.sharedInstance().delegate = self
+        AudioEngine.sharedInstance().startEngine()
+        
         session = SessionManager(displayName: "Andrew", delegate: self)
         tableView.dataSource = self
         tableView.estimatedRowHeight = 100
@@ -29,7 +33,7 @@ class ViewController: UIViewController, MessageResponderDelegate, UITableViewDat
         registerForKeyboardNotifications()
     }
 
-    // MARK: - Message Handling
+    // MARK: - MessageResponderDelegate Handling
     
     @IBAction func sendMessagePressed(sender: AnyObject) {
         if inputTextField.text != nil && count(inputTextField.text) > 0 {
@@ -47,6 +51,10 @@ class ViewController: UIViewController, MessageResponderDelegate, UITableViewDat
         let insertionIndexPath = NSIndexPath(forRow: messageCollection.count - 1, inSection: 0)
         tableView.insertRowsAtIndexPaths([insertionIndexPath], withRowAnimation: .Fade)
         tableView.scrollToRowAtIndexPath(insertionIndexPath, atScrollPosition: .Bottom, animated: false)
+    }
+    
+    func didReceiveAudio(audio: Audio) {
+        AudioEngine.sharedInstance().playBuffer(audio.audio)
     }
     
     // MARK: - UITableView DataSource
@@ -96,6 +104,12 @@ class ViewController: UIViewController, MessageResponderDelegate, UITableViewDat
         UIView.animateWithDuration(duration, animations: { () -> Void in
             self.messageView.layoutIfNeeded()
         })
+    }
+    
+    // MARK: - Audio Engine Delegate
+    
+    func didOutputAudioBuffer(audioBuffer: NSData) {
+        session?.writeAudio(audioBuffer)
     }
     
 }
