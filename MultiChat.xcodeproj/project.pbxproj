@@ -85,12 +85,10 @@
 		867776261B36FF6F003D9E05 /* MultiChat */ = {
 			isa = PBXGroup;
 			children = (
-				869F0DF21B4E9F56005AB3F9 /* AudioEngine.h */,
-				869F0DF31B4E9F56005AB3F9 /* AudioEngine.m */,
-				8677764B1B370428003D9E05 /* SessionManager.swift */,
-				866E30321B373CFF00E1574C /* MessageTableViewCell.swift */,
+				869F0DF71B4EB167005AB3F9 /* ViewController */,
+				869F0DF61B4EB15B005AB3F9 /* MultiChatSession */,
+				869F0DF51B4EB150005AB3F9 /* AudioEngine */,
 				867776291B36FF6F003D9E05 /* AppDelegate.swift */,
-				8677762B1B36FF6F003D9E05 /* ViewController.swift */,
 				8677762D1B36FF6F003D9E05 /* Main.storyboard */,
 				867776301B36FF6F003D9E05 /* Images.xcassets */,
 				867776321B36FF6F003D9E05 /* LaunchScreen.xib */,
@@ -123,6 +121,32 @@
 				8677763E1B36FF6F003D9E05 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		869F0DF51B4EB150005AB3F9 /* AudioEngine */ = {
+			isa = PBXGroup;
+			children = (
+				869F0DF21B4E9F56005AB3F9 /* AudioEngine.h */,
+				869F0DF31B4E9F56005AB3F9 /* AudioEngine.m */,
+			);
+			name = AudioEngine;
+			sourceTree = "<group>";
+		};
+		869F0DF61B4EB15B005AB3F9 /* MultiChatSession */ = {
+			isa = PBXGroup;
+			children = (
+				8677764B1B370428003D9E05 /* SessionManager.swift */,
+			);
+			name = MultiChatSession;
+			sourceTree = "<group>";
+		};
+		869F0DF71B4EB167005AB3F9 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				866E30321B373CFF00E1574C /* MessageTableViewCell.swift */,
+				8677762B1B36FF6F003D9E05 /* ViewController.swift */,
+			);
+			name = ViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
