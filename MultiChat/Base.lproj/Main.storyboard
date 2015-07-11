@@ -28,7 +28,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MDK-LG-PDv">
-                                                    <rect key="frame" x="10" y="10" width="42" height="21"/>
+                                                    <rect key="frame" x="10" y="10" width="42" height="20.5"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -63,8 +63,8 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="chm-JP-BVj">
                                 <rect key="frame" x="0.0" y="556" width="600" height="44"/>
                                 <subviews>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="x9R-lK-BfP">
-                                        <rect key="frame" x="8" y="8" width="540" height="28"/>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="x9R-lK-BfP">
+                                        <rect key="frame" x="75" y="8" width="473" height="28"/>
                                         <animations/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
@@ -79,15 +79,24 @@
                                             <action selector="sendMessagePressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="AaU-8U-niw"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zWw-Rg-v2p">
+                                        <rect key="frame" x="8" y="7" width="59" height="30"/>
+                                        <animations/>
+                                        <state key="normal" title="Transmit">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                    </button>
                                 </subviews>
                                 <animations/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="4W7-Jq-eOi"/>
-                                    <constraint firstItem="x9R-lK-BfP" firstAttribute="leading" secondItem="chm-JP-BVj" secondAttribute="leading" constant="8" id="GlF-wT-X0x"/>
                                     <constraint firstAttribute="trailing" secondItem="ZKe-ba-D9n" secondAttribute="trailing" constant="8" id="JJn-kt-kHi"/>
                                     <constraint firstItem="x9R-lK-BfP" firstAttribute="top" secondItem="chm-JP-BVj" secondAttribute="top" constant="8" id="S1e-7b-Wa8"/>
+                                    <constraint firstItem="x9R-lK-BfP" firstAttribute="leading" secondItem="zWw-Rg-v2p" secondAttribute="trailing" constant="8" id="SG1-Lo-olQ"/>
+                                    <constraint firstAttribute="bottom" secondItem="zWw-Rg-v2p" secondAttribute="bottom" constant="7" id="Ztq-su-mjc"/>
                                     <constraint firstAttribute="bottom" secondItem="x9R-lK-BfP" secondAttribute="bottom" constant="8" id="aa1-r4-6Ss"/>
+                                    <constraint firstItem="zWw-Rg-v2p" firstAttribute="leading" secondItem="chm-JP-BVj" secondAttribute="leading" constant="8" id="g7f-Hw-DV8"/>
                                     <constraint firstAttribute="bottom" secondItem="ZKe-ba-D9n" secondAttribute="bottom" constant="8" id="lPH-gN-CGW"/>
                                     <constraint firstItem="ZKe-ba-D9n" firstAttribute="leading" secondItem="x9R-lK-BfP" secondAttribute="trailing" constant="8" id="m1z-I4-E15"/>
                                 </constraints>
@@ -107,6 +116,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="Hup-nh-Lil"/>
                     <connections>
+                        <outlet property="audioTransmitButton" destination="zWw-Rg-v2p" id="gGE-Oe-Ma3"/>
                         <outlet property="bottomConstraint" destination="nJn-Wd-Q4h" id="k6m-rv-MZu"/>
                         <outlet property="inputTextField" destination="x9R-lK-BfP" id="hBL-5v-HSL"/>
                         <outlet property="messageView" destination="chm-JP-BVj" id="Cw2-we-PJj"/>

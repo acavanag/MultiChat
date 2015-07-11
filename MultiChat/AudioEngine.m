@@ -17,7 +17,10 @@
 @property (nonatomic, strong, nonnull) AVAudioFormat *audioFormat;
 @end
 
+//66148
+
 static const int kBus = 0;
+static const int kBufferSize = 8192;//4096;
 
 @implementation AudioEngine
 
@@ -34,8 +37,20 @@ static const int kBus = 0;
 
 #pragma mark - Setup Audio Engine
 
+- (void)configureAudioSession
+{
+    NSError *error = nil;
+    [[AVAudioSession sharedInstance] setPreferredIOBufferDuration:0.1 error:&error];
+    
+    if (error) {
+        NSLog(@"%@", [error description]);
+    }
+}
+
 - (void)setupAudioEngine
 {
+    [self configureAudioSession];
+    
     AVAudioEngine *audioEngine = [[AVAudioEngine alloc] init];
     
     AVAudioPlayerNode *playerNode = [[AVAudioPlayerNode alloc] init];
@@ -59,9 +74,10 @@ static const int kBus = 0;
 {
     if (!recording) {
         [_audioEngine.inputNode installTapOnBus:kBus
-                                     bufferSize:4096
+                                     bufferSize:kBufferSize
                                          format:[_audioEngine.inputNode inputFormatForBus:kBus]
                                           block:^(AVAudioPCMBuffer *buffer, AVAudioTime *when) {
+                                              NSLog(@"%u", buffer.frameLength);
                                               processBuffer(buffer, when, (__bridge void *)(self));
                                           }];
         recording = YES;
@@ -119,6 +135,9 @@ NSData* dataBufferForBuffer(AVAudioPCMBuffer *buffer)
 
 - (void)playBuffer:(NSData *)data
 {
+    
+    NSLog(@"playing buffer");
+    
     AVAudioPCMBuffer *buffer = audioBufferForData(data, (__bridge void *)(self));
     [self.playerNode scheduleBuffer:buffer completionHandler:nil];
 }

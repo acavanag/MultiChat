@@ -12,10 +12,18 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var a = HPAudioEngine()
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        
+        //a.yolo()
+        
+        a.configureAudioSession()
+        
         return true
+        
+        
+        
     }
 
     func applicationWillResignActive(application: UIApplication) {

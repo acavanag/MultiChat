@@ -11,7 +11,8 @@ import UIKit
 private let mc_chatCell = "mcChatCellIdentifier"
 
 final class ViewController: UIViewController, MessageResponderDelegate, UITableViewDataSource, AudioEngineDelegateProtocol {
-
+    
+    @IBOutlet weak var audioTransmitButton: UIButton!
     @IBOutlet weak var inputTextField: UITextField!
     @IBOutlet weak var messageView: UIView!
     @IBOutlet weak var tableView: UITableView!
@@ -23,14 +24,25 @@ final class ViewController: UIViewController, MessageResponderDelegate, UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        AudioEngine.sharedInstance().delegate = self
-        AudioEngine.sharedInstance().startEngine()
+//        AudioEngine.sharedInstance().delegate = self
+//        AudioEngine.sharedInstance().startEngine()
+//        
+//        
+//        for var i = 1; i < 720; i++ {
+//            let path = NSBundle.mainBundle().pathForResource("audio\(i)", ofType: nil)!
+//            let data = NSData(contentsOfFile: path)!
+//            AudioEngine.sharedInstance().playBuffer(data)
+//        }
+        
         
         session = SessionManager(displayName: "Andrew", delegate: self)
         tableView.dataSource = self
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableViewAutomaticDimension
         registerForKeyboardNotifications()
+        
+        audioTransmitButton.addTarget(self, action: "startTransmitAudio", forControlEvents: .TouchDown)
+        audioTransmitButton.addTarget(self, action: "endTransmitAudio", forControlEvents: .TouchUpInside | .TouchUpOutside)
     }
 
     // MARK: - MessageResponderDelegate Handling
@@ -55,6 +67,16 @@ final class ViewController: UIViewController, MessageResponderDelegate, UITableV
     
     func didReceiveAudio(audio: Audio) {
         AudioEngine.sharedInstance().playBuffer(audio.audio)
+    }
+    
+    // MARK: - Audio Target Action
+    
+    func startTransmitAudio() {
+        AudioEngine.sharedInstance().startRecording()
+    }
+    
+    func endTransmitAudio() {
+        AudioEngine.sharedInstance().stopRecording()
     }
     
     // MARK: - UITableView DataSource
@@ -109,6 +131,9 @@ final class ViewController: UIViewController, MessageResponderDelegate, UITableV
     // MARK: - Audio Engine Delegate
     
     func didOutputAudioBuffer(audioBuffer: NSData) {
+        
+        println("buf! \(audioBuffer.length)")
+        
         session?.writeAudio(audioBuffer)
     }
     
