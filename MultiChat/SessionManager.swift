@@ -34,8 +34,8 @@ class SessionManager: NSObject {
     
     private weak var delegate: MessageResponderDelegate?
     
-    private(set) var isAdvertising: Bool = false
-    private(set) var isBrowsing: Bool = false
+    private(set) var isAdvertising = false
+    private(set) var isBrowsing = false
     
     init(displayName: String = UIDevice.currentDevice().name, delegate: MessageResponderDelegate) {
         localPeer = MCPeerID(displayName: displayName)
