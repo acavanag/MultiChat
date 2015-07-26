@@ -14,13 +14,11 @@ struct Message {
     var message: String
 }
 
-protocol MessageResponderDelegate: class, NSObjectProtocol {
-    func didReceiveMessage(message: Message)
-}
+typealias MessageBlock = (message: Message) -> Void
 
 private let cm_serviceType = "cm-chat-service"
 
-class SessionManager: NSObject {
+final class SessionManager: NSObject {
     
     lazy var session : MCSession = {
         let session = MCSession(peer: self.localPeer, securityIdentity: nil, encryptionPreference: .None)
@@ -32,18 +30,16 @@ class SessionManager: NSObject {
     private var advertiser: MCNearbyServiceAdvertiser
     private var browser: MCNearbyServiceBrowser
     
-    private weak var delegate: MessageResponderDelegate?
+    private var messageBlock: MessageBlock?
     
     private(set) var isAdvertising = false
     private(set) var isBrowsing = false
     
-    init(displayName: String = UIDevice.currentDevice().name, delegate: MessageResponderDelegate) {
+    init(displayName: String = UIDevice.currentDevice().name) {
         localPeer = MCPeerID(displayName: displayName)
 
         browser = MCNearbyServiceBrowser(peer: localPeer, serviceType: cm_serviceType)
         advertiser = MCNearbyServiceAdvertiser(peer: localPeer, discoveryInfo: nil, serviceType: cm_serviceType)
-        
-        self.delegate = delegate
         
         super.init()
         
@@ -93,11 +89,16 @@ class SessionManager: NSObject {
     private func readData(data: NSData, peer: MCPeerID) {
         if let data = NSString(data: data, encoding: NSUTF8StringEncoding) as? String {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                delegate?.didReceiveMessage(Message(peer: peer, message: data))
+                self.messageBlock?(message: Message(peer: peer, message: data))
             })
         }
     }
 
+    // MARK: - Read Block
+    
+    func receiveMessage(block: MessageBlock) {
+        messageBlock = block
+    }
 }
 
 // MARK: - Browser Delegate

@@ -10,36 +10,35 @@ import UIKit
 
 private let mc_chatCell = "mcChatCellIdentifier"
 
-class ViewController: UIViewController, MessageResponderDelegate, UITableViewDataSource {
+class ViewController: UIViewController, UITableViewDataSource {
 
     @IBOutlet weak var inputTextField: UITextField!
     @IBOutlet weak var messageView: UIView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     
-    var session: SessionManager?
+    let session = SessionManager(displayName: "Andrew")
     var messageCollection = [Message]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        session = SessionManager(displayName: "Andrew", delegate: self)
         tableView.dataSource = self
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableViewAutomaticDimension
         registerForKeyboardNotifications()
+        
+        session.receiveMessage({ [weak self] (message) -> Void in
+            self?.insertMessage(message)
+        })
     }
 
     // MARK: - Message Handling
     
     @IBAction func sendMessagePressed(sender: AnyObject) {
         if inputTextField.text != nil && count(inputTextField.text) > 0 {
-            session?.writeMessage(inputTextField.text)
+            session.writeMessage(inputTextField.text)
             inputTextField.text = ""
         }
-    }
-
-    func didReceiveMessage(message: Message) {
-        insertMessage(message)
     }
     
     func insertMessage(message: Message) {
