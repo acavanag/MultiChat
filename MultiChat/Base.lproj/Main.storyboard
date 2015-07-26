@@ -4,7 +4,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--MC Chat-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
                 <viewController id="vXZ-lx-hvc" customClass="ViewController" customModule="MultiChat" customModuleProvider="target" sceneMemberID="viewController">
@@ -31,14 +31,14 @@
                                                     <rect key="frame" x="10" y="10" width="42" height="21"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C31-ZI-YQ8">
                                                     <rect key="frame" x="60" y="10" width="530" height="21"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -105,7 +105,13 @@
                             <constraint firstItem="aRx-9V-PUo" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="oJ3-qS-J2R"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="Hup-nh-Lil"/>
+                    <navigationItem key="navigationItem" title="MC Chat" id="Hup-nh-Lil">
+                        <barButtonItem key="leftBarButtonItem" title="Users" id="RbF-ou-II7">
+                            <connections>
+                                <action selector="usersPressed:" destination="vXZ-lx-hvc" id="Kho-eS-rKy"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="bottomConstraint" destination="nJn-Wd-Q4h" id="k6m-rv-MZu"/>
                         <outlet property="inputTextField" destination="x9R-lK-BfP" id="hBL-5v-HSL"/>

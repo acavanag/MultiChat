@@ -17,7 +17,7 @@ class ViewController: UIViewController, UITableViewDataSource {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     
-    let session = SessionManager(displayName: "Andrew")
+    let session = SessionManager(displayName: "Andrew2")
     var messageCollection = [Message]()
     
     override func viewDidLoad() {
@@ -32,6 +32,12 @@ class ViewController: UIViewController, UITableViewDataSource {
         })
     }
 
+    // MARK: - Users Button Target Action
+    
+    @IBAction func usersPressed(sender: AnyObject) {
+        session.presentBrowser(self)
+    }
+    
     // MARK: - Message Handling
     
     @IBAction func sendMessagePressed(sender: AnyObject) {
@@ -66,7 +72,7 @@ class ViewController: UIViewController, UITableViewDataSource {
     
     func configureCell(cell: MessageTableViewCell, indexPath: NSIndexPath) {
         let message = messageCollection[indexPath.row]
-        cell.senderLabel.text = message.peer?.displayName
+        cell.senderLabel.text = message.peer?.displayName != nil ? "\(message.peer!.displayName!) ::" : "N/A"
         cell.messageLabel.text = message.message
     }
     

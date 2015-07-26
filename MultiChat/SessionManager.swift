@@ -31,6 +31,7 @@ final class SessionManager: NSObject {
     private var browser: MCNearbyServiceBrowser
     
     private var messageBlock: MessageBlock?
+    private weak var browserPresentationController: UIViewController?
     
     private(set) var isAdvertising = false
     private(set) var isBrowsing = false
@@ -48,6 +49,13 @@ final class SessionManager: NSObject {
         
         browse(true)
         advertise(true)
+    }
+    
+    func presentBrowser(controller: UIViewController) {
+        let browserViewController = MCBrowserViewController(browser: browser, session: session)
+        browserViewController.delegate = self
+        browserPresentationController = controller
+        controller.presentViewController(browserViewController, animated: true, completion: nil)
     }
     
     // MARK: - Browsing / Advertising
@@ -149,6 +157,23 @@ extension SessionManager: MCSessionDelegate {
         //noop
     }
     
+}
+
+// MARK: - MCBrowserViewController Delegate
+
+extension SessionManager: MCBrowserViewControllerDelegate {
+    func browser(browser: MCNearbyServiceBrowser!, didNotStartBrowsingForPeers error: NSError!) {
+        //noop
+    }
+    func browserViewController(browserViewController: MCBrowserViewController!, shouldPresentNearbyPeer peerID: MCPeerID!, withDiscoveryInfo info: [NSObject : AnyObject]!) -> Bool {
+        return true
+    }
+    func browserViewControllerDidFinish(browserViewController: MCBrowserViewController!) {
+        browserPresentationController?.dismissViewControllerAnimated(true, completion: nil)
+    }
+    func browserViewControllerWasCancelled(browserViewController: MCBrowserViewController!) {
+        browserPresentationController?.dismissViewControllerAnimated(true, completion: nil)
+    }
 }
 
 
