@@ -34,8 +34,8 @@ class SessionManager: NSObject {
     
     private weak var delegate: MessageResponderDelegate?
     
-    private(set) var isAdvertising: Bool = false
-    private(set) var isBrowsing: Bool = false
+    private(set) var isAdvertising = false
+    private(set) var isBrowsing = false
     
     init(displayName: String = UIDevice.currentDevice().name, delegate: MessageResponderDelegate) {
         localPeer = MCPeerID(displayName: displayName)
@@ -74,7 +74,7 @@ class SessionManager: NSObject {
         isBrowsing = browse
     }
     
-    // MARK: - Abstracted Data Handling
+    // MARK: - Data Handling
     
     func writeMessage(message: String) {
         if let data = message.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true) {
@@ -107,31 +107,30 @@ extension SessionManager: MCNearbyServiceBrowserDelegate {
     func browser(browser: MCNearbyServiceBrowser!, foundPeer peerID: MCPeerID!, withDiscoveryInfo info: [NSObject : AnyObject]!) {
         browser.invitePeer(peerID, toSession: session, withContext: nil, timeout: 10)
     }
-    
-    func browser(browser: MCNearbyServiceBrowser!, lostPeer peerID: MCPeerID!) {
-        //noop
-    }
-    
 }
 
 // MARK: - Advertiser Delegate
 
 extension SessionManager: MCNearbyServiceAdvertiserDelegate {
-    
     func advertiser(advertiser: MCNearbyServiceAdvertiser!, didReceiveInvitationFromPeer peerID: MCPeerID!, withContext context: NSData!, invitationHandler: ((Bool, MCSession!) -> Void)!) {
         invitationHandler(true, session)
     }
-    
 }
 
 // MARK: - Session Delegate
 
 extension SessionManager: MCSessionDelegate {
-    
     func session(session: MCSession!, didReceiveData data: NSData!, fromPeer peerID: MCPeerID!) {
         readData(data, peer: peerID)
     }
-    
+}
+
+// MARK: - noop delegate methods
+
+extension SessionManager: MCNearbyServiceBrowserDelegate, MCSessionDelegate {
+    func browser(browser: MCNearbyServiceBrowser!, lostPeer peerID: MCPeerID!) {
+        //noop
+    }
     func session(session: MCSession!, peer peerID: MCPeerID!, didChangeState state: MCSessionState) {
         //noop
     }
@@ -147,7 +146,6 @@ extension SessionManager: MCSessionDelegate {
     func session(session: MCSession!, didStartReceivingResourceWithName resourceName: String!, fromPeer peerID: MCPeerID!, withProgress progress: NSProgress!) {
         //noop
     }
-    
 }
 
 
